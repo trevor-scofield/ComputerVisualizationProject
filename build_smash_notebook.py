@@ -56,13 +56,7 @@ The visualizations were produced in Python with Matplotlib. The LLM workflow was
 
 ### Prompt sequence
 
-1. “I need a python script which will help to visualize the information in the tournament_info.csv file. use any of the well known python libraries to do do”
-2. “here is the result I got from running the bash command: usage: visualize_tournaments.py [-h] [-o OUTPUT] [--top TOP] [csv_file] visualize_tournaments.py: error: field larger than field limit (131072)”
-3. “I would like for the information to show the characters that are played and their win percentage on a scatter plot.”
-4. “what kind of information is on the csv file”
-5. “what is in the game_data column?”
-6. “that is what we are looking for please implement that into the code as soon as you can”
-7. “take all that that has been done so far. and then take and modify it to these requirements … Team of 2: 7 visualizations … final notebook report …”
+1. “here is the result I got from running the bash command: usage: visualize_tournaments.py [-h] [-o OUTPUT] [--top TOP] [csv_file] visualize_tournaments.py: error: field larger than field limit (131072)”
 
 ### Re-run
 
