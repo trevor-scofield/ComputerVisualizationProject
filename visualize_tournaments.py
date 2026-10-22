@@ -12,12 +12,24 @@ from __future__ import annotations
 
 import argparse
 import csv
+import sys
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 from matplotlib.ticker import StrMethodFormatter
+
+
+def set_csv_field_size_limit() -> None:
+    """Raise csv's default 128 KiB limit, accounting for platform C limits."""
+    limit = sys.maxsize
+    while True:
+        try:
+            csv.field_size_limit(limit)
+            return
+        except OverflowError:
+            limit //= 10
 
 
 def parse_bool(value: str) -> str:
@@ -31,6 +43,7 @@ def parse_bool(value: str) -> str:
 
 
 def build_dashboard(csv_path: Path, output_path: Path, top_n: int = 10) -> int:
+    set_csv_field_size_limit()
     tournaments_by_year: Counter[str] = Counter()
     games: Counter[str] = Counter()
     countries: Counter[str] = Counter()
@@ -151,7 +164,7 @@ def main() -> None:
         "csv_file",
         nargs="?",
         type=Path,
-        default=Path(__file__).parent / "tournament_info.csv" / "tournament_info.csv",
+        default=Path(__file__).parent / "tournament_info" / "tournament_info.csv",
         help="Input CSV (default: tournament_info.csv/tournament_info.csv beside this script)",
     )
     parser.add_argument("-o", "--output", type=Path, default=Path("tournament_dashboard.png"), help="Output PNG path")
