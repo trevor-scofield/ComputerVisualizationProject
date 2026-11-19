@@ -225,6 +225,9 @@ The proposal names Christian Ohlsson and Trevor Scofield. The team reported an e
 | Trevor Scofield | Christian Ohlsson | 50% | Team-reported equal contribution split |
 
 The course may require a particular submission format; copy each member's completed evaluation into that form if needed."""),
+    nbf.v4.new_markdown_cell("""**Component-specific participation: interactive joint exploration and getting-started README**
+
+For this added component, Trevor Scofield reports contributing 75% and Christian Ohlsson 25%. Christian's availability was limited by other class projects. This component-specific split applies to the interactive exploration and setup documentation; it does not change the previously reported 50/50 overall project split."""),
     nbf.v4.new_markdown_cell("""## Interactive joint exploration
 
 The companion Dash application adds a second, interactive view to the seven static figures above. It links each sampled player-side game record in a two-dimensional PCA projection to a time view that aggregates the same records by tournament year and character. The view is intended to let an analyst move from a high-dimensional feature neighborhood to individual records and then inspect when those records occurred.
