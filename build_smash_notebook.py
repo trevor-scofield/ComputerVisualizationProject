@@ -225,12 +225,46 @@ The proposal names Christian Ohlsson and Trevor Scofield. The team reported an e
 | Trevor Scofield | Christian Ohlsson | 50% | Team-reported equal contribution split |
 
 The course may require a particular submission format; copy each member's completed evaluation into that form if needed."""),
+    nbf.v4.new_markdown_cell("""## Interactive joint exploration
+
+The companion Dash application adds a second, interactive view to the seven static figures above. It links each sampled player-side game record in a two-dimensional PCA projection to a time view that aggregates the same records by tournament year and character. The view is intended to let an analyst move from a high-dimensional feature neighborhood to individual records and then inspect when those records occurred.
+
+### Feature mapping and projection
+
+One observation is one player's side of one game in `sets.csv`'s `game_data`, joined to its tournament by key. The app keeps observations only when both players' character labels are present. It stores date year, entrant count, event, game title, player ID, character, opponent character, stage, win/loss, set ID, and game number for filtering, hover details, linking, and interpretation.
+
+PCA features are standardized year and log entrant count, plus centered one-hot indicators for the sampled character and opponent-character categories and the 24 most common sampled stages; other stages share an `Other` indicator. Win/loss is excluded from PCA to avoid using the outcome to define the similarity map. Users can color the projection by year, character, or game result. Character coloring displays the 12 most frequent filtered characters separately and groups the remainder as `Other characters`. The app reports the variance explained by its first two principal components.
+
+### Linked interactions
+
+- A year-range slider and multi-select character filter update both panels at once.
+- Box and lasso tools select projection samples or year-character markers in the time view. Selecting projection samples highlights the corresponding year-character aggregates. Selecting a timeline marker highlights all filtered sampled records in that year-character group in the projection.
+- Hovering a projection point reveals its year, both characters, stage, game result, event, and player ID. The detail panel summarizes selected sample count, observed selected-sample win rate, years, and common characters; it lists up to 30 individual records.
+- `Clear selections` removes the linked selection while preserving active filters.
+
+The timeline and PCA are both computed from the same reservoir sample, so timeline counts are sample counts, not full-dataset totals. It shows the ten most common filtered characters separately and combines the rest into `Other characters`. Sample selection is uniform across linked, parsed player-side game observations and is repeatable with the default seed 23.
+
+### Reproducibility and run instructions
+
+The default sample size is 18,000 player-side observations. On first launch, the program streams the large CSVs, reads tournament dates and entrant counts, parses each set's JSON game records, and writes `output/interactive_joint_sample.json.gz`. Cache metadata includes source paths, file sizes, modification times, sample size, and seed. Matching inputs reuse the cache; `--rebuild` forces another full scan. This keeps later application launches from rescanning the raw sets file.
+
+Install the dependencies once and run the app from the project directory:
+
+```powershell
+python -m pip install -r requirements.txt
+python interactive_joint_exploration.py
+```
+
+Then open `http://127.0.0.1:8050`. The app runs locally; stop it with Ctrl+C in the terminal. Optional CLI settings include `--tournaments`, `--sets`, and `--cache` for paths; `--sample-size` and `--seed` for sampling; `--rebuild` to refresh the cache; and `--host`, `--port`, and `--debug` for the local Dash server. Full usage and limitations are in `INTERACTIVE_JOINT_EXPLORATION.md`; complete implementation is in `interactive_joint_exploration.py`.
+
+Interpret the projection as descriptive feature similarity, not a skill score or causal explanation. The sampled population excludes games with missing character labels, the input has uneven tournament coverage, and a two-dimensional PCA view necessarily compresses information. The observed win rate in the detail panel is unadjusted for player skill, matchup choices, event level, or data coverage."""),
     nbf.v4.new_markdown_cell("""## Method, design decisions, and reproducibility notes
 
 - **Platform and LLM integration:** Python and Matplotlib implement the full workflow. Prompt refinement and the dataset-driven change from tournament-level to individual-game character analysis are recorded above.
 - **Chart choice:** timelines show event/match volume; stacked areas show changes in character appearances; scatter plots compare pick volume and game outcomes; the matchup matrix reveals directional rates and counts; bars rank set winners; the alluvial shows dominant-character transitions.
 - **Custom encodings:** Figure 5 uses manually mapped, split triangular cells; Figure 7 draws custom Bézier flow ribbons with widths proportional to player counts.
 - **Re-run materials:** `smash_history_report.ipynb`, `smash_history_analysis.py`, and `requirements.txt`, plus the two CSVs obtained from the cited dataset. Run all notebook cells in order. A local cache is reused only while the CSV paths, sizes, and modification times match.
+- **Interactive exploration:** `interactive_joint_exploration.py`, `INTERACTIVE_JOINT_EXPLORATION.md`, `assets/interactive_joint_exploration.css`, and the added Dash, Plotly, and NumPy requirements provide the linked PCA and timeline app described above. Its sampling seed, cache rules, feature encodings, interaction mapping, and launch commands are documented in the interactive section.
 - **Source attribution:** dataset URL from the proposal; research references appear below. Data-derived results are limited to the supplied files and the recorded `game_data` coverage."""),
     nbf.v4.new_markdown_cell("""## References
 

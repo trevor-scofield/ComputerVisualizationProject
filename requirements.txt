@@ -1,2 +1,5 @@
 matplotlib>=3.8
 jupyter>=1.0
+numpy>=1.26
+plotly>=5.18
+dash>=2.16
